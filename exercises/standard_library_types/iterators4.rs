@@ -1,7 +1,5 @@
 // iterators4.rs
 
-// I AM NOT DONE
-
 pub fn factorial(num: u64) -> u64 {
     // Complete this function to return the factorial of num
     // Do not use:
@@ -12,6 +10,15 @@ pub fn factorial(num: u64) -> u64 {
     // For an extra challenge, don't use:
     // - recursion
     // Execute `rustlings hint iterators4` for hints.
+    //
+    // Ver1: Probably still counts as return-oriented ?
+    match num {
+        0 | 1 => 1,
+        _ => factorial(num-1)*num,
+    }
+    // Ver2: edge case with 0.. else fold should do it
+    //let iter = 1..0;
+    // (0..num).fold(0, |prod, x| prod*x)
 }
 
 #[cfg(test)]
