@@ -21,7 +21,6 @@ enum IntoColorError {
     IntConversion,
 }
 
-// I AM NOT DONE
 
 // Your task is to complete this implementation
 // and return an Ok result of inner type Color.
@@ -36,19 +35,19 @@ enum IntoColorError {
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = IntoColorError;
     fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
-        // TODO: sth sth closure
-        let red:   u8 = u8::try_from(tuple.0).map_err(IntoColorError::IntConversion)?;
-        let green: u8 = u8::try_from(tuple.1).map_err(IntoColorError::IntConversion)?;
-        let blue:  u8 = u8::try_from(tuple.2).map_err(IntoColorError::IntConversion)?;
+        let red:   u8 = u8::try_from(tuple.0).map_err(|_| IntoColorError::IntConversion)?;
+        let green: u8 = u8::try_from(tuple.1).map_err(|_| IntoColorError::IntConversion)?;
+        let blue:  u8 = u8::try_from(tuple.2).map_err(|_| IntoColorError::IntConversion)?;
 
         Ok( Color { red, green, blue })
-        // TODO: sth like this should be possible?
-        // shadowing seems to be the issue currently?
-        // for el in tuple {
-        //     let el:  u8 = i16::try_from(el).map_err(IntoColorError::IntConversion)?;
+
+        // TODO: alternatively - sth sth iterator? atleast for array.
+        // prob. in situ?
+        //for el in tuple.iter() {
+        //     let el:  u8 = u8::try_from(el).map_err(|_| IntoColorError::IntConversion)?;
         // }
 
-        // Ok( Color { tuple.0, tuple.1, tuple.2 })
+        // Ok( Color { red: tuple.0, green: tuple.1, blue: tuple.2 })
     }
 }
 
@@ -56,13 +55,11 @@ impl TryFrom<(i16, i16, i16)> for Color {
 impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
     fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
-        let red:   u8 = u8::try_from(arr[0]).map_err(IntoColorError::IntConversion)?;
-        let green: u8 = u8::try_from(arr[1]).map_err(IntoColorError::IntConversion)?;
-        let blue:  u8 = u8::try_from(arr[2]).map_err(IntoColorError::IntConversion)?;
+        let red:   u8 = u8::try_from(arr[0]).map_err(|_| IntoColorError::IntConversion)?;
+        let green: u8 = u8::try_from(arr[1]).map_err(|_| IntoColorError::IntConversion)?;
+        let blue:  u8 = u8::try_from(arr[2]).map_err(|_| IntoColorError::IntConversion)?;
 
         Ok( Color { red, green, blue })
-        // TODO: maybe iterator ?
-        // let conv: (u8, u8, u8) = arr.iter().map(|x| TryFrom(x)).collect();
     }
 }
 
@@ -70,10 +67,10 @@ impl TryFrom<[i16; 3]> for Color {
 impl TryFrom<&[i16]> for Color {
     type Error = IntoColorError;
     fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
-        if slice.len() != 3 { return IntoColorError::BadLen; }
-        let red:   u8 = u8::try_from(*slice[0]).map_err(IntoColorError::IntConversion)?;
-        let green: u8 = u8::try_from(*slice[1]).map_err(IntoColorError::IntConversion)?;
-        let blue:  u8 = u8::try_from(*slice[2]).map_err(IntoColorError::IntConversion)?;
+        if slice.len() != 3 { return Err(IntoColorError::BadLen); }
+        let red:   u8 = u8::try_from(slice[0]).map_err(|_| IntoColorError::IntConversion)?;
+        let green: u8 = u8::try_from(slice[1]).map_err(|_| IntoColorError::IntConversion)?;
+        let blue:  u8 = u8::try_from(slice[2]).map_err(|_| IntoColorError::IntConversion)?;
 
         Ok( Color { red, green, blue })
     }
